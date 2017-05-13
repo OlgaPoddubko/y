@@ -1,0 +1,20 @@
+{
+  "name": "testproject",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.0.1",
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5",
+	"babel-polyfill": "^6.23.0",
+    "css-loader": "^0.28.1",
+    "style-loader": "^0.17.0"
+  }
+}

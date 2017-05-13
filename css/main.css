@@ -1,0 +1,188 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Myriad Pro','PT Sans', sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    position: relative;
+    background: #24304d;
+}
+
+/*header*/
+.search-container {
+    width: 40%;
+    margin: 40px auto;
+    display: flex;
+    justify-content: space-between;
+    background: #ffffff;
+    border-radius: 3px;
+}
+
+.search-input {
+    width: 100%;
+    border: 0;
+    padding-left: 10px;
+    border-radius: 3px 0 0 3px;
+}
+
+.search-button {
+    border: 0;
+    background: #ffffff;
+    border-radius: 0 3px 3px 0;
+}
+
+.fa-search {
+    margin: 5px;
+    padding: 5px 10px;
+    color: #526db1;
+}
+
+.search-button:hover .fa-search {
+    color: #52e5b1;
+}
+
+/*main*/
+main {
+    padding-bottom: 70px;
+}
+
+.empty-result {
+    text-align: center;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.main-inner {
+    /*display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+*/
+    max-width: 1400px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.gallery {
+    width: 9999px;
+    transition: margin-left 250ms;
+}
+
+.arrow {
+    position: absolute;
+    bottom: 10px;
+    padding: 0;
+    background: #ddd;
+    border-radius: 15px;
+    border: 1px solid gray;
+    font-size: 24px;
+    line-height: 24px;
+    color: #444;
+    display: block;
+}
+
+.arrow:focus {
+    outline: none;
+}
+
+.arrow:hover {
+    background: #ccc;
+    cursor: pointer;
+}
+
+.prev {
+    left: 600px;
+}
+
+.next {
+    right: 600px;
+}
+
+section {
+    display: inline-block;
+    width: 325px; /* для респонсив переделать */
+    height: 480px;
+    overflow: hidden;
+    margin-top: 15px;
+    margin-right: 20px;
+
+    background: #ffffff;
+    border-radius: 5px;
+}
+
+.thumbnail {
+    position: relative;
+}
+
+.fa-play-circle{
+    display: block;
+    position: absolute;
+    top: 24%;
+    left: 37%;
+    font-size: 100px;
+    color: #ffffff;
+    opacity: 0.75;
+}
+
+.thumbnail:hover .fa-play-circle{
+    opacity: 0.9;
+}
+
+.information {
+    padding: 20px;
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #52e5b1;
+}
+
+a.title{
+    color: #526db1;
+}
+
+a.title:hover{
+    text-decoration: none;
+    color: #52e5b1;
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+ul {
+    list-style-type:none;
+    margin-bottom: 10px;
+    border-top: 1px solid #24304d;
+    border-bottom: 1px solid #24304d;
+}
+
+li {
+    margin: 7px 10px 7px 0;
+}
+
+i {
+    margin-right: 9px;
+}
+
+/**/
+footer{
+    width: 100%;
+    position: absolute;
+    height: 70px;
+    left: 0;
+    bottom: 0;
+}
