@@ -39,7 +39,7 @@ function renderMain(resp) {
     main.innerHTML = _.template(tmpl)(resp);
 
 // remove from here
-    let width = 325;
+    let width = 350;
     let count = 4; // количество изображений
 
     let carousel = document.querySelector('.main-inner');
@@ -60,7 +60,7 @@ function renderMain(resp) {
 
 // на мышку, отменить поведение брайзера -- выделение текста при mousemove
     document.body.addEventListener('mousedown', mousedown);
-  //  document.body.addEventListener('mousemove', mousemove);
+    document.body.addEventListener('mousemove', mousemove);
     document.body.addEventListener('mouseup', mouseup);
 
     drag = false;
@@ -69,6 +69,10 @@ function renderMain(resp) {
     function mousedown(e) {
         drag = true;
         current_drag = e.x;
+    };
+
+    function mousemove(e) {
+        e.preventDefault(); // несовершенно
     };
 
     function mouseup(e){
@@ -84,7 +88,7 @@ function renderMain(resp) {
         }
         drag = false;
 
-    }
+    };
 // swipe
 /*
     document.body.addEventListener('touchstart', mousedown);

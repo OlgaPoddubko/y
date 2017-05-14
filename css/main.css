@@ -105,7 +105,7 @@ main {
 
 section {
     display: inline-block;
-    width: 325px; /* для респонсив переделать */
+    width: 327px; /* для респонсив переделать */
     height: 480px;
     overflow: hidden;
     margin-top: 15px;
