@@ -6,8 +6,9 @@ renderHeader.renderHeader();
 
 let searchInput = document.body.querySelector(".search-input");
 searchInput.onkeypress = function (e) {
-        e = e || window.event;
-        if (e.keyCode == 13) makeCustomQuery();
+        if (e.keyCode == 13) {
+            makeCustomQuery();
+        }
     }
 
 let searchButton = document.body.querySelector(".search-button");
@@ -21,5 +22,4 @@ function makeCustomQuery(){
     }).catch(function (error) {
         console.log(error);
     });
-}
-
+};

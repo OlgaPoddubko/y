@@ -9,8 +9,8 @@ html {
 }
 
 body {
-    min-height: 100%;
-    position: relative;
+   /* min-height: 100%;
+    position: relative;*/
     background: #24304d;
 }
 
@@ -69,10 +69,41 @@ main {
 }
 
 .gallery {
-    width: 9999px;
+    width: 99999px;
     transition: margin-left 250ms;
 }
 
+.paging {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.page {
+    display: inline-block;
+    width: 26px;
+    height: 21px;
+    margin-right: 10px;
+    padding-top: 4px;
+
+    font-size: 13px;
+    color: white;
+    border-radius: 25px;
+}
+
+.page:hover {
+    background: #52e5b1;
+    cursor: pointer;
+}
+
+.prev,
+.next {
+    background: #cccccc;
+}
+
+.curr {
+    background: #52e5b1;
+}
+/*
 .arrow {
     position: absolute;
     bottom: 10px;
@@ -102,7 +133,7 @@ main {
 .next {
     right: 600px;
 }
-
+*/
 section {
     display: inline-block;
     width: 327px; /* для респонсив переделать */
@@ -179,6 +210,7 @@ i {
 }
 
 /**/
+/*
 footer{
     width: 100%;
     position: absolute;
@@ -186,3 +218,4 @@ footer{
     left: 0;
     bottom: 0;
 }
+*/

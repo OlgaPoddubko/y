@@ -1,17 +1,28 @@
+let swipe = require('./swipe');// пока не востребовано
+let service = require('./youtubeService');
+let addSection = require('./addSection');
+let updatedItemsNumber = addSection.updatedItemsNumber; // не востребовано
+
+let nextPageToken;
+let itemsNumber = 0;
+
 // преобразовать дату публикации
 function renderMain(resp) {
+    nextPageToken = resp.nextPageToken;
+
     let items = resp.items;
+    itemsNumber += items.length;
+
     let tmpl;
 
-    if(items.length === 0) {
+    if (items.length === 0) {
         tmpl = '<p class="empty-result">Sorry, no items to your query :(</p>';
     }
 
     else {
         tmpl = '<div class="main-inner">\
-                    <button class="arrow prev">⇦</button>\
                     <div class="gallery">\
-                        <% for (let i=1; i<=items.length-1; i++) { %> \
+                        <% for (let i = 1; i < items.length; i++) { %> \
                             <section id="">\
                                 <div class="thumbnail">\
                                     <a href="http://www.youtube.com/watch?v=<%=items[i].id.videoId%>" class="link">\
@@ -31,40 +42,74 @@ function renderMain(resp) {
                             </section> \
                         <% } %>\
 				    </div>\
-				    <button class="arrow next">⇨</button>\
-				</div>';
+				</div>\
+                <div class="paging">\
+                    <span class="page prev"></span>\
+                    <span class="page curr"></span>\
+                    <span class="page next"></span>\
+                </div>';
     }
 
     let main = document.body.querySelector("main");
     main.innerHTML = _.template(tmpl)(resp);
+    /*
+     // предполагаемое подключение, не работает
+     let paging = document.querySelector('.paging');
+     paging.querySelector('.prev').addEventListener('click', swipe.pagePrev);
+     paging.querySelector('.next').addEventListener('click', swipe.pageNext);
 
-// remove from here
-    let width = 350;
-    let count = 4; // количество изображений
+     document.body.addEventListener('mousedown', swipe.mousedown);
+     document.body.addEventListener('mousemove', swipe.mousemove);
+     document.body.addEventListener('mouseup', swipe.mouseup);
+     */
+// pagination
+    let paging = document.querySelector('.paging');
+    paging.querySelector('.prev').addEventListener('click', pagePrev);
+    paging.querySelector('.next').addEventListener('click', pageNext);
 
-    let carousel = document.querySelector('.main-inner');
-    let gallery = carousel.querySelector('.gallery');
-    let listElems = carousel.querySelectorAll('section');
-
-    let position = 0; // текущий сдвиг влево
-
-    carousel.querySelector('.prev').onclick = function() {
-        position = position + width * count;
-        gallery.style.marginLeft = position + 'px';
-    };
-
-    carousel.querySelector('.next').onclick = function() {
-        position = position - width * count;
-        gallery.style.marginLeft = position + 'px';
-    };
-
-// на мышку, отменить поведение брайзера -- выделение текста при mousemove
     document.body.addEventListener('mousedown', mousedown);
     document.body.addEventListener('mousemove', mousemove);
     document.body.addEventListener('mouseup', mouseup);
 
-    drag = false;
-    current_drag = 0;
+    let width = 350;
+    let columns = 4; // количество изображений
+    let position = 0; // текущий сдвиг влево
+    let gallery = document.querySelector('.gallery');
+    let currentPageNumber = 1;
+
+    function pagePrev() {
+        position = Math.min(position + width * columns, 0);
+        gallery.style.marginLeft = position + 'px';
+        if (currentPageNumber > 1) {
+            currentPageNumber -= 1;
+        }
+    };
+
+    let searchInput = document.body.querySelector(".search-input");
+    let query = searchInput.value;
+
+    function pageNext() {
+        if(updatedItemsNumber) {
+            itemsNumber = updatedItemsNumber;
+        }
+
+        if ((currentPageNumber + 1) * columns > itemsNumber) {// заменить items.length на queue.length
+            service.downloadMore(nextPageToken, query).then(function (response) {
+                console.log(response);
+                addSection.addSection(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+        position = position - width * columns;
+        gallery.style.marginLeft = position + 'px';
+
+        currentPageNumber += 1;
+    };
+
+// pagination with mouse
+    let drag = false;
+    let current_drag = 0;
 
     function mousedown(e) {
         drag = true;
@@ -75,31 +120,29 @@ function renderMain(resp) {
         e.preventDefault(); // несовершенно
     };
 
-    function mouseup(e){
+    function mouseup(e) {
         if (drag) {
             if (e.x - current_drag >= 150) {
-                position = position + width * count;
-                gallery.style.marginLeft = position + 'px';
+                pagePrev();
             }
             else if (e.x - current_drag <= -150) {
-                position = position - width * count;
-                gallery.style.marginLeft = position + 'px';
-            };
+                pageNext();
+            }
+            ;
         }
         drag = false;
-
     };
-// swipe
-/*
-    document.body.addEventListener('touchstart', mousedown);
-    //document.body.addEventListener('touchmove', touchmove);
-    document.body.addEventListener('touchend', mouseup);
-*/
-};
+
+    return nextPageToken;
+}
+
 /*
 function parsePublishedDate(dateString) {
     let date = new Date(Date.parse(dateString));
     return (date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear();
-}
+};
 */
+
 module.exports.renderMain = renderMain;
+module.exports.nextPageToken = nextPageToken;
+module.exports.itemsNumber = itemsNumber;
