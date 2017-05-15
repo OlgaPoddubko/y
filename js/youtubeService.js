@@ -10,16 +10,16 @@ async function search(keyword, maxResults) {
     let url = searchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults);
     let response = await xhr.httpGet(url);
     let videoList = parseResponse(response);
-    nextPageToken = videoList.nextPageToken;
-    console.log(nextPageToken);//
     return videoList;
 }
 
-async function videoStatistics(ids) {
-    let idStr = ids.join(); //id=nq4aU9gmZQk,REu2BcnlD34,qbPTdW7KgOg
-    let url = videosUrl.replace('{id}', idStr);
+async function videoStatistics(ids) {//resp.statistics.viewCount
+    //
+    //let idStr = ids.join(); //id=nq4aU9gmZQk,REu2BcnlD34,qbPTdW7KgOg
+    let url = videosUrl.replace('{id}', ids);
     let response = await xhr.httpGet(url);
     let videoStatistics = parseResponse(response); // пока не используется
+    console.log(videoStatistics);
     return videoStatistics;
 }
 

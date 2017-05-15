@@ -82,16 +82,16 @@ async function search(keyword, maxResults) {
     let url = searchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults);
     let response = await xhr.httpGet(url);
     let videoList = parseResponse(response);
-    nextPageToken = videoList.nextPageToken;
-    console.log(nextPageToken);//
     return videoList;
 }
 
-async function videoStatistics(ids) {
-    let idStr = ids.join(); //id=nq4aU9gmZQk,REu2BcnlD34,qbPTdW7KgOg
-    let url = videosUrl.replace('{id}', idStr);
+async function videoStatistics(ids) {//resp.statistics.viewCount
+    //
+    //let idStr = ids.join(); //id=nq4aU9gmZQk,REu2BcnlD34,qbPTdW7KgOg
+    let url = videosUrl.replace('{id}', ids);
     let response = await xhr.httpGet(url);
-    let videoStatistics = parseResponse(response); // пока это не осмыслено
+    let videoStatistics = parseResponse(response); // пока не используется
+    console.log(videoStatistics);
     return videoStatistics;
 }
 
@@ -137,7 +137,6 @@ function makeCustomQuery(){
     let query = searchInput.value;
     service.search(query, 15).then(function (response) {
         console.log(response);
-        //renderMain.renderMain(response);
         renderMainGrid.renderMainGrid(response);
     }).catch(function (error) {
         console.log(error);
@@ -187,6 +186,7 @@ module.exports.renderHeader = renderHeader;
 /***/ (function(module, exports, __webpack_require__) {
 
 let service = __webpack_require__(0);
+//let test = require('./testExport');
 
 let nextPageToken;
 let itemsNumber = 0;
@@ -195,13 +195,28 @@ function addSection(resp) {
 
     let items = resp.items;
     itemsNumber += items.length;
-    console.log(itemsNumber);
 
     for (let i = 1; i < items.length; i++) {
         let item = resp.items[i];
 
-        let tmpl = '<section id="">\
-                    <div class="thumbnail">\
+        let date = new Date(Date.parse(item.snippet.publishedAt));
+        let publishDate = ((date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear());
+
+        let videoId = item.id.videoId;
+        let views;
+        service.videoStatistics(videoId).then(function (response) {
+            views = response.items[0].statistics.viewCount;
+            fillSection(item, publishDate, views);
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+    nextPageToken = resp.nextPageToken;
+}
+
+function fillSection(item, publishDate, views) {
+    let tmpl = '<div class="thumbnail">\
                         <a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link">\
                             <img src="<%=snippet.thumbnails.medium.url%>" alt="" width="100%" height="auto">\
                             <i class="fa fa-play-circle" aria-hidden="true"></i>\
@@ -210,28 +225,26 @@ function addSection(resp) {
                     <div class="information">\
                         <h2><a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link title"><%=snippet.title%></a></h2>\
                         <ul>\
-                            <li class="cannel"><a href=""><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></a></li>\
-                            <li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i><%=snippet.publishedAt%></li>\
-                            <li class="views"><i class="fa fa-eye" aria-hidden="true"></i>no information</li>\
+                            <li class="cannel"><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></li>\
+                            <li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i></li>\
+                            <li class="views"><i class="fa fa-eye" aria-hidden="true"></i></li>\
                         </ul>\
                         <p class="description"><%=snippet.description%></p>\
-                    </div>\
-                </section>';
+                    </div>';
 
-        let gallery = document.body.querySelector(".gallery");
-        let newSection = document.createElement("section");
-        newSection.innerHTML = _.template(tmpl)(item);
-        gallery.appendChild(newSection);
-    }
-    nextPageToken = resp.nextPageToken;
-    console.log(nextPageToken);
+    let gallery = document.body.querySelector(".gallery");
+    let newSection = document.createElement("section");
+    newSection.innerHTML = _.template(tmpl)(item);
+
+    newSection.querySelector('.published-at').insertAdjacentText('beforeEnd', publishDate);
+    newSection.querySelector('.views').insertAdjacentText('beforeEnd', views);
+    gallery.appendChild(newSection);
 }
 
-// преобразовать дату публикации
 function renderMainGrid(resp) {
     let tmpl;
-
     let items = resp.items;
+
     if (items.length === 0) {
         tmpl = '<p class="empty-result">Sorry, no items to your query :(</p>';
     }
@@ -282,7 +295,6 @@ function renderMainGrid(resp) {
     function pageNext() {
         if ((currentPageNumber + 1) * columns > itemsNumber) {
             service.downloadMore(nextPageToken, query).then(function (response) {
-                console.log(response);
                 addSection(response);
             }).catch(function (error) {
                 console.log(error);
@@ -318,17 +330,12 @@ function renderMainGrid(resp) {
         }
         drag = false;
     };
+
+   // test.test();
 }
 
-/*
- function parsePublishedDate(dateString) {
- let date = new Date(Date.parse(dateString));
- return (date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear();
- };
- */
-
 module.exports.renderMainGrid = renderMainGrid;
-//module.exports.nextPageToken = nextPageToken;//-
+//module.exports.getNextPageToken = getNextPageToken;//-
 //module.exports.itemsNumber = itemsNumber;//-
 
 
