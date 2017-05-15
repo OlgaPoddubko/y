@@ -1,6 +1,7 @@
 let service = require('./youtubeService');
 let renderHeader = require('./renderHeader');
-let renderMain = require('./renderMain');
+//let renderMain = require('./renderMain');
+let renderMainGrid = require('./renderMainGrid');
 
 renderHeader.renderHeader();
 
@@ -18,7 +19,8 @@ function makeCustomQuery(){
     let query = searchInput.value;
     service.search(query, 15).then(function (response) {
         console.log(response);
-        renderMain.renderMain(response);
+        //renderMain.renderMain(response);
+        renderMainGrid.renderMainGrid(response);
     }).catch(function (error) {
         console.log(error);
     });
