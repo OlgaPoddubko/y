@@ -143,5 +143,4 @@ function renderMainGrid(resp) {
 }
 
 module.exports.renderMainGrid = renderMainGrid;
-//module.exports.getNextPageToken = getNextPageToken;//-
-//module.exports.itemsNumber = itemsNumber;//-
+

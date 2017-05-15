@@ -9,8 +9,6 @@ html {
 }
 
 body {
-   /* min-height: 100%;
-    position: relative;*/
     background: #24304d;
 }
 
@@ -103,37 +101,7 @@ main {
 .curr {
     background: #52e5b1;
 }
-/*
-.arrow {
-    position: absolute;
-    bottom: 10px;
-    padding: 0;
-    background: #ddd;
-    border-radius: 15px;
-    border: 1px solid gray;
-    font-size: 24px;
-    line-height: 24px;
-    color: #444;
-    display: block;
-}
 
-.arrow:focus {
-    outline: none;
-}
-
-.arrow:hover {
-    background: #ccc;
-    cursor: pointer;
-}
-
-.prev {
-    left: 600px;
-}
-
-.next {
-    right: 600px;
-}
-*/
 section {
     display: inline-block;
     width: 327px; /* для респонсив переделать */
@@ -209,13 +177,3 @@ i {
     margin-right: 9px;
 }
 
-/**/
-/*
-footer{
-    width: 100%;
-    position: absolute;
-    height: 70px;
-    left: 0;
-    bottom: 0;
-}
-*/

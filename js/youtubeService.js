@@ -13,13 +13,11 @@ async function search(keyword, maxResults) {
     return videoList;
 }
 
-async function videoStatistics(ids) {//resp.statistics.viewCount
-    //
-    //let idStr = ids.join(); //id=nq4aU9gmZQk,REu2BcnlD34,qbPTdW7KgOg
+async function videoStatistics(ids) {
+    //let idStr = ids.join();
     let url = videosUrl.replace('{id}', ids);
     let response = await xhr.httpGet(url);
-    let videoStatistics = parseResponse(response); // пока не используется
-    console.log(videoStatistics);
+    let videoStatistics = parseResponse(response);
     return videoStatistics;
 }
 
@@ -27,7 +25,6 @@ async function downloadMore(pageToken, keyword, maxResults = 15) {
     let url = nextPageSearchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults).replace('{pageToken}', pageToken);
     let response = await xhr.httpGet(url);
     let addVideoList = parseResponse(response);
-    console.log(addVideoList); //
     return addVideoList;
 }
 
