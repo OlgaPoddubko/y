@@ -1,5 +1,5 @@
-let searchInput,
-  searchButton;
+let searchInput;
+let searchButton;
 
 function renderHeader() {
   const bottomScript = document.body.querySelector('script');
@@ -31,11 +31,11 @@ function renderHeader() {
   document.body.insertBefore(main, bottomScript);
 }
 function setSearchAction(searchFunc) {
-  searchInput.onkeypress = function (e) {
-    if (e.keyCode == 13) {
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.keyCode === 13) {
       searchFunc(searchInput.value);
     }
-  };
+  });
   searchButton.addEventListener('click', () => {
     searchFunc(searchInput.value);
   });

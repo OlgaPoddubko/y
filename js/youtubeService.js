@@ -9,7 +9,7 @@ const videosUrl = 'https://www.googleapis.com/youtube/v3/videos?key={key}&id={id
 async function search(keyword, maxResults) {
   const url = searchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults);
   const response = await xhr.httpGet(url);
-  const videoList = parseResponse(response);
+  const videoList = JSON.parse(response);
   return videoList;
 }
 
@@ -17,19 +17,15 @@ async function videoStatistics(ids) {
     // let idStr = ids.join();
   const url = videosUrl.replace('{id}', ids);
   const response = await xhr.httpGet(url);
-  const videoStatistics = parseResponse(response);
-  return videoStatistics;
+  const videoStat = JSON.parse(response);
+  return videoStat;
 }
 
 async function downloadMore(pageToken, keyword, maxResults = 15) {
   const url = nextPageSearchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults).replace('{pageToken}', pageToken);
   const response = await xhr.httpGet(url);
-  const addVideoList = parseResponse(response);
+  const addVideoList = JSON.parse(response);
   return addVideoList;
-}
-
-function parseResponse(searchResponse) {
-  return JSON.parse(searchResponse);
 }
 
 module.exports.search = search;

@@ -81,7 +81,7 @@ const videosUrl = 'https://www.googleapis.com/youtube/v3/videos?key={key}&id={id
 async function search(keyword, maxResults) {
   const url = searchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults);
   const response = await xhr.httpGet(url);
-  const videoList = parseResponse(response);
+  const videoList = JSON.parse(response);
   return videoList;
 }
 
@@ -89,19 +89,15 @@ async function videoStatistics(ids) {
     // let idStr = ids.join();
   const url = videosUrl.replace('{id}', ids);
   const response = await xhr.httpGet(url);
-  const videoStatistics = parseResponse(response);
-  return videoStatistics;
+  const videoStat = JSON.parse(response);
+  return videoStat;
 }
 
 async function downloadMore(pageToken, keyword, maxResults = 15) {
   const url = nextPageSearchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults).replace('{pageToken}', pageToken);
   const response = await xhr.httpGet(url);
-  const addVideoList = parseResponse(response);
+  const addVideoList = JSON.parse(response);
   return addVideoList;
-}
-
-function parseResponse(searchResponse) {
-  return JSON.parse(searchResponse);
 }
 
 module.exports.search = search;
@@ -119,25 +115,25 @@ const renderHeader = __webpack_require__(2);
 const renderMainGrid = __webpack_require__(3);
 
 renderHeader.renderHeader();
-renderHeader.setSearchAction(makeCustomQuery);
 
 function makeCustomQuery(query) {
   // const query = searchInput.value;
   service.search(query, 15).then((response) => {
-    console.log(response);
     renderMainGrid.renderMainGrid(response);
   }).catch((error) => {
-    console.log(error);
+    console.warn(error);
   });
 }
+
+renderHeader.setSearchAction(makeCustomQuery);
 
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
-let searchInput,
-  searchButton;
+let searchInput;
+let searchButton;
 
 function renderHeader() {
   const bottomScript = document.body.querySelector('script');
@@ -169,11 +165,11 @@ function renderHeader() {
   document.body.insertBefore(main, bottomScript);
 }
 function setSearchAction(searchFunc) {
-  searchInput.onkeypress = function (e) {
-    if (e.keyCode == 13) {
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.keyCode === 13) {
       searchFunc(searchInput.value);
     }
-  };
+  });
   searchButton.addEventListener('click', () => {
     searchFunc(searchInput.value);
   });
@@ -192,11 +188,37 @@ const service = __webpack_require__(0);
 let nextPageToken;
 let itemsNumber = 0;
 
+function fillSection(item, publishDate, views) {
+  const tmpl = '<div class="thumbnail">' +
+                        '<a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link">' +
+                            '<img src="<%=snippet.thumbnails.medium.url%>" alt="" width="100%" height="auto">' +
+                            '<i class="fa fa-play-circle" aria-hidden="true"></i>' +
+                        '</a>' +
+                    '</div>' +
+                    '<div class="information">' +
+                        '<h2><a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link title"><%=snippet.title%></a></h2>' +
+                        '<ul>' +
+                            '<li class="cannel"><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></li>' +
+                            '<li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i></li>' +
+                            '<li class="views"><i class="fa fa-eye" aria-hidden="true"></i></li>' +
+                        '</ul>' +
+                        '<p class="description"><%=snippet.description%></p>' +
+                    '</div>';
+
+  const gallery = document.body.querySelector('.gallery');
+  const newSection = document.createElement('section');
+  newSection.innerHTML = _.template(tmpl)(item);
+
+  newSection.querySelector('.published-at').insertAdjacentText('beforeEnd', publishDate);
+  newSection.querySelector('.views').insertAdjacentText('beforeEnd', views);
+  gallery.appendChild(newSection);
+}
+
 function addSection(resp) {
   const items = resp.items;
   itemsNumber += items.length;
 
-  for (let i = 1; i < items.length; i++) {
+  for (let i = 1; i < items.length; i += 1) {
     const item = resp.items[i];
 
     const date = new Date(Date.parse(item.snippet.publishedAt));
@@ -216,37 +238,12 @@ function addSection(resp) {
       const views = response.items[0].statistics.viewCount;
       fillSection(item, publishDate, views);
     }).catch((error) => {
-      console.log(error);
+      console.warn(error);
     });
   }
   nextPageToken = resp.nextPageToken;
 }
 
-function fillSection(item, publishDate, views) {
-  const tmpl = '<div class="thumbnail">\
-                        <a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link">\
-                            <img src="<%=snippet.thumbnails.medium.url%>" alt="" width="100%" height="auto">\
-                            <i class="fa fa-play-circle" aria-hidden="true"></i>\
-                        </a>\
-                    </div>\
-                    <div class="information">\
-                        <h2><a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link title"><%=snippet.title%></a></h2>\
-                        <ul>\
-                            <li class="cannel"><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></li>\
-                            <li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i></li>\
-                            <li class="views"><i class="fa fa-eye" aria-hidden="true"></i></li>\
-                        </ul>\
-                        <p class="description"><%=snippet.description%></p>\
-                    </div>';
-
-  const gallery = document.body.querySelector('.gallery');
-  const newSection = document.createElement('section');
-  newSection.innerHTML = _.template(tmpl)(item);
-
-  newSection.querySelector('.published-at').insertAdjacentText('beforeEnd', publishDate);
-  newSection.querySelector('.views').insertAdjacentText('beforeEnd', views);
-  gallery.appendChild(newSection);
-}
 
 function renderMainGrid(resp) {
   let tmpl;
@@ -255,15 +252,15 @@ function renderMainGrid(resp) {
   if (items.length === 0) {
     tmpl = '<p class="empty-result">Sorry, no items to your query :(</p>';
   } else {
-    tmpl = '<div class="main-inner">\
-                    <div class="gallery">\
-				    </div>\
-				</div>\
-                <div class="paging">\
-                    <span class="page prev"></span>\
-                    <span class="page curr"></span>\
-                    <span class="page next"></span>\
-                </div>';
+    tmpl = '<div class="main-inner">' +
+                '<div class="gallery">' +
+            '</div>' +
+            '</div>' +
+            '<div class="paging">' +
+                '<span class="page prev"></span>' +
+                '<span class="page curr"></span>' +
+                '<span class="page next"></span>' +
+            '</div>';
   }
 
   const main = document.body.querySelector('main');
@@ -272,13 +269,6 @@ function renderMainGrid(resp) {
   addSection(resp);
 
 // pagination
-  const paging = document.querySelector('.paging');
-  paging.querySelector('.prev').addEventListener('click', pagePrev);
-  paging.querySelector('.next').addEventListener('click', pageNext);
-
-  document.body.addEventListener('mousedown', mousedown);
-  document.body.addEventListener('mousemove', mousemove);
-  document.body.addEventListener('mouseup', mouseup);
 
   const width = 350;
   const columns = 4;
@@ -287,7 +277,7 @@ function renderMainGrid(resp) {
   let currentPageNumber = 1;
 
   function pagePrev() {
-    position = Math.min(position + width * columns, 0);
+    position = Math.min(position + (width * columns), 0);
     gallery.style.marginLeft = `${position}px`;
     if (currentPageNumber > 1) {
       currentPageNumber -= 1;
@@ -298,11 +288,11 @@ function renderMainGrid(resp) {
   const query = searchInput.value;
 
   function pageNext() {
-    if ((currentPageNumber + 1) * columns > itemsNumber) {
+    if ((currentPageNumber + 2) * columns > itemsNumber) {
       service.downloadMore(nextPageToken, query).then((response) => {
         addSection(response);
       }).catch((error) => {
-        console.log(error);
+        console.warn(error);
       });
     }
     position -= width * columns;
@@ -313,27 +303,35 @@ function renderMainGrid(resp) {
 
 // pagination with mouse
   let drag = false;
-  let current_drag = 0;
+  let currentDrag = 0;
 
   function mousedown(e) {
     drag = true;
-    current_drag = e.x;
+    currentDrag = e.x;
   }
 
   function mousemove(e) {
-    e.preventDefault(); // несовершенно
+    e.preventDefault();
   }
 
   function mouseup(e) {
     if (drag) {
-      if (e.x - current_drag >= 150) {
+      if (e.x - currentDrag >= 150) {
         pagePrev();
-      } else if (e.x - current_drag <= -150) {
+      } else if (e.x - currentDrag <= -150) {
         pageNext();
       }
     }
     drag = false;
   }
+
+  const paging = document.querySelector('.paging');
+  paging.querySelector('.prev').addEventListener('click', pagePrev);
+  paging.querySelector('.next').addEventListener('click', pageNext);
+
+  document.body.addEventListener('mousedown', mousedown);
+  document.body.addEventListener('mousemove', mousemove);
+  document.body.addEventListener('mouseup', mouseup);
 }
 
 module.exports.renderMainGrid = renderMainGrid;
@@ -349,15 +347,15 @@ function httpGet(url) {
     const request = new XMLHttpRequest();
     request.open('GET', url);
 
-    request.onload = function () {
-      if (request.status == 200) {
+    request.onload = () => {
+      if (request.status === 200) {
         resolve(request.response);
       } else {
         reject(Error(request.statusText));
       }
     };
 
-    request.onerror = function () {
+    request.onerror = () => {
       reject(Error('Network Error'));
     };
 
