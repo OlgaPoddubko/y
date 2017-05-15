@@ -11,7 +11,16 @@ function addSection(resp) {
         let item = resp.items[i];
 
         let date = new Date(Date.parse(item.snippet.publishedAt));
-        let publishDate = ((date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear());
+        let day = date.getDate();
+        if(day < 10) {
+            day = '0' + day;
+        }
+        let month = date.getMonth() + 1;
+        if(month < 10) {
+            month = '0' + month;
+        }
+
+        let publishDate = (day + "." + month + "." + date.getFullYear());
 
         let videoId = item.id.videoId;
         service.videoStatistics(videoId).then(function (response) {

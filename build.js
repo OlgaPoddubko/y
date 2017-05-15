@@ -85,13 +85,11 @@ async function search(keyword, maxResults) {
     return videoList;
 }
 
-async function videoStatistics(ids) {//resp.statistics.viewCount
-    //
-    //let idStr = ids.join(); //id=nq4aU9gmZQk,REu2BcnlD34,qbPTdW7KgOg
+async function videoStatistics(ids) {
+    //let idStr = ids.join();
     let url = videosUrl.replace('{id}', ids);
     let response = await xhr.httpGet(url);
-    let videoStatistics = parseResponse(response); // пока не используется
-    console.log(videoStatistics);
+    let videoStatistics = parseResponse(response);
     return videoStatistics;
 }
 
@@ -99,7 +97,6 @@ async function downloadMore(pageToken, keyword, maxResults = 15) {
     let url = nextPageSearchUrl.replace('{keyword}', keyword).replace('{maxResults}', maxResults).replace('{pageToken}', pageToken);
     let response = await xhr.httpGet(url);
     let addVideoList = parseResponse(response);
-    console.log(addVideoList); //
     return addVideoList;
 }
 
@@ -186,13 +183,11 @@ module.exports.renderHeader = renderHeader;
 /***/ (function(module, exports, __webpack_require__) {
 
 let service = __webpack_require__(0);
-//let test = require('./testExport');
 
 let nextPageToken;
 let itemsNumber = 0;
 
 function addSection(resp) {
-
     let items = resp.items;
     itemsNumber += items.length;
 
@@ -200,12 +195,20 @@ function addSection(resp) {
         let item = resp.items[i];
 
         let date = new Date(Date.parse(item.snippet.publishedAt));
-        let publishDate = ((date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear());
+        let day = date.getDate();
+        if(day < 10) {
+            day = '0' + day;
+        }
+        let month = date.getMonth() + 1;
+        if(month < 10) {
+            month = '0' + month;
+        }
+
+        let publishDate = (day + "." + month + "." + date.getFullYear());
 
         let videoId = item.id.videoId;
-        let views;
         service.videoStatistics(videoId).then(function (response) {
-            views = response.items[0].statistics.viewCount;
+            let views = response.items[0].statistics.viewCount;
             fillSection(item, publishDate, views);
 
         }).catch(function (error) {
@@ -330,13 +333,10 @@ function renderMainGrid(resp) {
         }
         drag = false;
     };
-
-   // test.test();
 }
 
 module.exports.renderMainGrid = renderMainGrid;
-//module.exports.getNextPageToken = getNextPageToken;//-
-//module.exports.itemsNumber = itemsNumber;//-
+
 
 
 /***/ }),
