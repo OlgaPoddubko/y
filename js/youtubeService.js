@@ -19,7 +19,7 @@ async function videoStatistics(ids) {
     let idStr = ids.join(); //id=nq4aU9gmZQk,REu2BcnlD34,qbPTdW7KgOg
     let url = videosUrl.replace('{id}', idStr);
     let response = await xhr.httpGet(url);
-    let videoStatistics = parseResponse(response); // пока это не осмыслено
+    let videoStatistics = parseResponse(response); // пока не используется
     return videoStatistics;
 }
 
