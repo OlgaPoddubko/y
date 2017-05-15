@@ -1,31 +1,45 @@
-function renderHeader(){
-    let bottomScript = document.body.querySelector("script");
+let searchInput,
+  searchButton;
 
-    let header = document.createElement("header");
-    document.body.insertBefore(header, bottomScript);
+function renderHeader() {
+  const bottomScript = document.body.querySelector('script');
 
-    let searchContainer = document.createElement("div");
-    searchContainer.className = "search-container";
-    header.appendChild(searchContainer);
+  const header = document.createElement('header');
+  document.body.insertBefore(header, bottomScript);
 
-    let searchInput = document.createElement("input");
-    searchInput.placeholder = "search";
-    searchInput.type = "search";
-    searchInput.className = "search-input";
-    searchInput.setAttribute("autofocus", "autofocus");
-    searchContainer.appendChild(searchInput);
+  const searchContainer = document.createElement('div');
+  searchContainer.className = 'search-container';
+  header.appendChild(searchContainer);
 
-    let searchButton = document.createElement("button");
-    searchButton.className = "search-button";
-    searchContainer.appendChild(searchButton);
+  searchInput = document.createElement('input');
+  searchInput.placeholder = 'search';
+  searchInput.type = 'search';
+  searchInput.className = 'search-input';
+  searchInput.setAttribute('autofocus', 'autofocus');
+  searchContainer.appendChild(searchInput);
 
-    let searchIcon = document.createElement("i");
-    searchIcon.className = "fa fa-search";
-    searchIcon.setAttribute("aria-hidden", "true");
-    searchButton.appendChild(searchIcon);
+  searchButton = document.createElement('button');
+  searchButton.className = 'search-button';
+  searchContainer.appendChild(searchButton);
 
-    let main = document.createElement("main");
-    document.body.insertBefore(main, bottomScript);
-};
+  const searchIcon = document.createElement('i');
+  searchIcon.className = 'fa fa-search';
+  searchIcon.setAttribute('aria-hidden', 'true');
+  searchButton.appendChild(searchIcon);
 
+  const main = document.createElement('main');
+  document.body.insertBefore(main, bottomScript);
+}
+function setSearchAction(searchFunc) {
+  searchInput.onkeypress = function (e) {
+    if (e.keyCode == 13) {
+      searchFunc(searchInput.value);
+    }
+  };
+  searchButton.addEventListener('click', () => {
+    searchFunc(searchInput.value);
+  });
+}
+
+module.exports.setSearchAction = setSearchAction;
 module.exports.renderHeader = renderHeader;

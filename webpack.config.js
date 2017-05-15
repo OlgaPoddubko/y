@@ -3,21 +3,30 @@ let path = require('path');
 
 module.exports = {
     entry:[
-        'babel-polyfill',
-        './js/main.js'
+         './js/main.js'
     ],
     output: {
         filename: 'build.js'
     },
 
     module: {
+        rules: [
+            {
+                test: /\.js/,
+                loader: 'eslint-loader',
+                exclude: /node_modules/,
+                enforce: 'pre',
+                options: {
+                    configFile: path.resolve('./.eslintrc'),
+                    fix: true
+                }
+            }
+        ],
         loaders: [
             {
                 test: /\.js/,
                 loader: 'babel-loader',
-                include: [
-                    "./app/js",
-                ],
+
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2015']
