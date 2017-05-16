@@ -273,6 +273,10 @@ function renderMain(resp) {
   const gallery = document.querySelector('.gallery');
   let currentPageNumber = 1;
 
+  if (currentPageNumber === 1) {
+    document.body.querySelector('page prev').style.display = 'none';
+  }
+
   function pagePrev() {
     position = Math.min(position + (width * columns), 0);
     gallery.style.marginLeft = `${position}px`;
