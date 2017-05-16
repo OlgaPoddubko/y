@@ -86,7 +86,6 @@ async function search(keyword, maxResults) {
 }
 
 async function videoStatistics(ids) {
-    // let idStr = ids.join();
   const url = videosUrl.replace('{id}', ids);
   const response = await xhr.httpGet(url);
   const videoStat = JSON.parse(response);
@@ -111,15 +110,13 @@ module.exports.videoStatistics = videoStatistics;
 
 const service = __webpack_require__(0);
 const renderHeader = __webpack_require__(2);
-// let renderMain = require('./renderMain');
-const renderMainGrid = __webpack_require__(3);
+const renderMain = __webpack_require__(3);
 
 renderHeader.renderHeader();
 
 function makeCustomQuery(query) {
-  // const query = searchInput.value;
   service.search(query, 15).then((response) => {
-    renderMainGrid.renderMainGrid(response);
+    renderMain.renderMain(response);
   }).catch((error) => {
     console.warn(error);
   });
@@ -164,6 +161,7 @@ function renderHeader() {
   const main = document.createElement('main');
   document.body.insertBefore(main, bottomScript);
 }
+
 function setSearchAction(searchFunc) {
   searchInput.addEventListener('keypress', (e) => {
     if (e.keyCode === 13) {
@@ -190,20 +188,20 @@ let itemsNumber = 0;
 
 function fillSection(item, publishDate, views) {
   const tmpl = '<div class="thumbnail">' +
-                        '<a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link">' +
-                            '<img src="<%=snippet.thumbnails.medium.url%>" alt="" width="100%" height="auto">' +
-                            '<i class="fa fa-play-circle" aria-hidden="true"></i>' +
-                        '</a>' +
-                    '</div>' +
-                    '<div class="information">' +
-                        '<h2><a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link title"><%=snippet.title%></a></h2>' +
-                        '<ul>' +
-                            '<li class="cannel"><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></li>' +
-                            '<li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i></li>' +
-                            '<li class="views"><i class="fa fa-eye" aria-hidden="true"></i></li>' +
-                        '</ul>' +
-                        '<p class="description"><%=snippet.description%></p>' +
-                    '</div>';
+        '<a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link">' +
+        '<img src="<%=snippet.thumbnails.medium.url%>" alt="" width="100%" height="auto">' +
+        '<i class="fa fa-play-circle" aria-hidden="true"></i>' +
+        '</a>' +
+        '</div>' +
+        '<div class="information">' +
+        '<h2><a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link title"><%=snippet.title%></a></h2>' +
+        '<ul>' +
+        '<li class="cannel"><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></li>' +
+        '<li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i></li>' +
+        '<li class="views"><i class="fa fa-eye" aria-hidden="true"></i></li>' +
+        '</ul>' +
+        '<p class="description"><%=snippet.description%></p>' +
+        '</div>';
 
   const gallery = document.body.querySelector('.gallery');
   const newSection = document.createElement('section');
@@ -245,7 +243,7 @@ function addSection(resp) {
 }
 
 
-function renderMainGrid(resp) {
+function renderMain(resp) {
   let tmpl;
   const items = resp.items;
 
@@ -253,13 +251,13 @@ function renderMainGrid(resp) {
     tmpl = '<p class="empty-result">Sorry, no items to your query :(</p>';
   } else {
     tmpl = '<div class="main-inner">' +
-                '<div class="gallery">' +
+            '<div class="gallery">' +
             '</div>' +
             '</div>' +
             '<div class="paging">' +
-                '<span class="page prev"></span>' +
-                '<span class="page curr"></span>' +
-                '<span class="page next"></span>' +
+            '<span class="page prev"></span>' +
+            '<span class="page curr"></span>' +
+            '<span class="page next"></span>' +
             '</div>';
   }
 
@@ -334,8 +332,7 @@ function renderMainGrid(resp) {
   document.body.addEventListener('mouseup', mouseup);
 }
 
-module.exports.renderMainGrid = renderMainGrid;
-
+module.exports.renderMain = renderMain;
 
 
 /***/ }),

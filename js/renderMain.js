@@ -5,20 +5,20 @@ let itemsNumber = 0;
 
 function fillSection(item, publishDate, views) {
   const tmpl = '<div class="thumbnail">' +
-                        '<a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link">' +
-                            '<img src="<%=snippet.thumbnails.medium.url%>" alt="" width="100%" height="auto">' +
-                            '<i class="fa fa-play-circle" aria-hidden="true"></i>' +
-                        '</a>' +
-                    '</div>' +
-                    '<div class="information">' +
-                        '<h2><a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link title"><%=snippet.title%></a></h2>' +
-                        '<ul>' +
-                            '<li class="cannel"><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></li>' +
-                            '<li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i></li>' +
-                            '<li class="views"><i class="fa fa-eye" aria-hidden="true"></i></li>' +
-                        '</ul>' +
-                        '<p class="description"><%=snippet.description%></p>' +
-                    '</div>';
+        '<a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link">' +
+        '<img src="<%=snippet.thumbnails.medium.url%>" alt="" width="100%" height="auto">' +
+        '<i class="fa fa-play-circle" aria-hidden="true"></i>' +
+        '</a>' +
+        '</div>' +
+        '<div class="information">' +
+        '<h2><a href="http://www.youtube.com/watch?v=<%=id.videoId%>" class="link title"><%=snippet.title%></a></h2>' +
+        '<ul>' +
+        '<li class="cannel"><i class="fa fa-user" aria-hidden="true"></i><%=snippet.channelTitle%></li>' +
+        '<li class="published-at"><i class="fa fa-calendar" aria-hidden="true"></i></li>' +
+        '<li class="views"><i class="fa fa-eye" aria-hidden="true"></i></li>' +
+        '</ul>' +
+        '<p class="description"><%=snippet.description%></p>' +
+        '</div>';
 
   const gallery = document.body.querySelector('.gallery');
   const newSection = document.createElement('section');
@@ -60,7 +60,7 @@ function addSection(resp) {
 }
 
 
-function renderMainGrid(resp) {
+function renderMain(resp) {
   let tmpl;
   const items = resp.items;
 
@@ -68,13 +68,13 @@ function renderMainGrid(resp) {
     tmpl = '<p class="empty-result">Sorry, no items to your query :(</p>';
   } else {
     tmpl = '<div class="main-inner">' +
-                '<div class="gallery">' +
+            '<div class="gallery">' +
             '</div>' +
             '</div>' +
             '<div class="paging">' +
-                '<span class="page prev"></span>' +
-                '<span class="page curr"></span>' +
-                '<span class="page next"></span>' +
+            '<span class="page prev"></span>' +
+            '<span class="page curr"></span>' +
+            '<span class="page next"></span>' +
             '</div>';
   }
 
@@ -149,5 +149,4 @@ function renderMainGrid(resp) {
   document.body.addEventListener('mouseup', mouseup);
 }
 
-module.exports.renderMainGrid = renderMainGrid;
-
+module.exports.renderMain = renderMain;

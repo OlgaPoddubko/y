@@ -30,6 +30,7 @@ function renderHeader() {
   const main = document.createElement('main');
   document.body.insertBefore(main, bottomScript);
 }
+
 function setSearchAction(searchFunc) {
   searchInput.addEventListener('keypress', (e) => {
     if (e.keyCode === 13) {

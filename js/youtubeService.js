@@ -14,7 +14,6 @@ async function search(keyword, maxResults) {
 }
 
 async function videoStatistics(ids) {
-    // let idStr = ids.join();
   const url = videosUrl.replace('{id}', ids);
   const response = await xhr.httpGet(url);
   const videoStat = JSON.parse(response);
