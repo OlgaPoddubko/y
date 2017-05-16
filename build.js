@@ -266,16 +266,17 @@ function renderMain(resp) {
   addSection(resp);
 
 // pagination
+  const mainInner = document.body.querySelector('main-inner');
+  console.log(mainInner);
+  /* const mainInnerWidth = getComputedStyle(mainInner);
+  console.log(mainInnerWidth);*/
+
 
   const width = 350;
   const columns = 4;
   let position = 0;
   const gallery = document.querySelector('.gallery');
   let currentPageNumber = 1;
-
-  if (currentPageNumber === 1) {
-    document.body.querySelector('page prev').style.display = 'none';
-  }
 
   function pagePrev() {
     position = Math.min(position + (width * columns), 0);
@@ -333,6 +334,7 @@ function renderMain(resp) {
   document.body.addEventListener('mousedown', mousedown);
   document.body.addEventListener('mousemove', mousemove);
   document.body.addEventListener('mouseup', mouseup);
+
 }
 
 module.exports.renderMain = renderMain;
