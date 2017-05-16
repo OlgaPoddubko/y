@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69dfdfe8-5362-4321-aaad-0f8295022e27" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/renderMainGrid.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.js" afterPath="$PROJECT_DIR$/build.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/main.js" afterPath="$PROJECT_DIR$/js/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/renderHeader.js" afterPath="$PROJECT_DIR$/js/renderHeader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/youtubeService.js" afterPath="$PROJECT_DIR$/js/youtubeService.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/main.css" afterPath="$PROJECT_DIR$/css/main.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/renderMain.js" afterPath="$PROJECT_DIR$/js/renderMain.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -35,7 +31,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="youtubeService.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="youtubeService.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/youtubeService.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="544">
@@ -48,12 +44,9 @@
       <file leaf-file-name="renderMain.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/renderMain.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-              <folding>
-                <marker date="1494921023856" expanded="true" signature="134:138" ph="{...}" />
-                <marker date="1494921023856" expanded="true" signature="4331:4386" ph="{...}" />
-              </folding>
+            <state relative-caret-position="-935">
+              <caret line="59" column="0" lean-forward="true" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -63,6 +56,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="382">
               <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/css/main.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="254">
+              <caret line="186" column="23" lean-forward="true" selection-start-line="186" selection-start-column="23" selection-end-line="186" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -122,7 +125,6 @@
         <option value="$PROJECT_DIR$/js/addSections.js" />
         <option value="$PROJECT_DIR$/js/addSection.js" />
         <option value="$PROJECT_DIR$/js/testExport.js" />
-        <option value="$PROJECT_DIR$/css/main.css" />
         <option value="$PROJECT_DIR$/.editorconfig" />
         <option value="$PROJECT_DIR$/js/xhr.js" />
         <option value="$PROJECT_DIR$/js/galleryTemplate.html" />
@@ -131,11 +133,12 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/js/renderMainGrid.js" />
-        <option value="$PROJECT_DIR$/js/renderMain.js" />
         <option value="$PROJECT_DIR$/js/youtubeService.js" />
         <option value="$PROJECT_DIR$/js/renderHeader.js" />
         <option value="$PROJECT_DIR$/build.js" />
         <option value="$PROJECT_DIR$/js/main.js" />
+        <option value="$PROJECT_DIR$/js/renderMain.js" />
+        <option value="$PROJECT_DIR$/css/main.css" />
       </list>
     </option>
   </component>
@@ -354,12 +357,12 @@
       <workItem from="1494170992906" duration="911000" />
       <workItem from="1494250192513" duration="47431000" />
       <workItem from="1494668845004" duration="6939000" />
-      <workItem from="1494769042438" duration="56440000" />
+      <workItem from="1494769042438" duration="58557000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="111721000" />
+    <option name="totallyTimeSpent" value="113838000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -595,14 +598,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="106" column="14" lean-forward="false" selection-start-line="106" selection-start-column="14" selection-end-line="106" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/xhr.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -659,17 +654,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/renderMain.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding>
-            <marker date="1494921023856" expanded="true" signature="134:138" ph="{...}" />
-            <marker date="1494921023856" expanded="true" signature="4331:4386" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/renderHeader.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="382">
@@ -707,14 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/renderMainGrid.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -723,10 +699,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/youtubeService.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
           <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/renderMain.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-935">
+          <caret line="59" column="0" lean-forward="true" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="186" column="23" lean-forward="true" selection-start-line="186" selection-start-column="23" selection-end-line="186" selection-end-column="23" />
           <folding />
         </state>
       </provider>

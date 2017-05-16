@@ -228,7 +228,6 @@ function addSection(resp) {
     if (month < 10) {
       month = `0${month}`;
     }
-
     const publishDate = (`${day}.${month}.${date.getFullYear()}`);
 
     const videoId = item.id.videoId;
