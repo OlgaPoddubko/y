@@ -73,29 +73,44 @@ main {
 }
 
 .page {
+    position: relative;
     display: inline-block;
-    width: 26px;
-    height: 21px;
+    width: 25px;
+    height: 25px;
     margin-right: 10px;
-    padding-top: 4px;
 
-    font-size: 13px;
-    color: white;
+    background: #cccccc;
     border-radius: 25px;
 }
 
 .page:hover {
     background: #52e5b1;
-    cursor: pointer;
-}
-
-.prev,
-.next {
-    background: #cccccc;
 }
 
 .curr {
     background: #52e5b1;
+}
+
+.tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    visibility: hidden;
+    width: 25px;
+    height: 20px;
+    margin-right: 10px;
+    padding-top: 5px;
+    font-size: 14px;
+    color: white;
+    border-radius: 25px;
+    background: #52e5b1;
+    cursor: pointer;
+}
+
+.curr > .tooltip{
+    visibility: visible;
 }
 
 section {
