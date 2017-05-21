@@ -27,6 +27,4 @@ async function downloadMore(pageToken, keyword, maxResults = 15) {
   return addVideoList;
 }
 
-module.exports.search = search;
-module.exports.downloadMore = downloadMore;
-module.exports.videoStatistics = videoStatistics;
+module.exports = { search, downloadMore, videoStatistics };

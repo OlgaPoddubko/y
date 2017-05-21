@@ -42,5 +42,4 @@ function setSearchAction(searchFunc) {
   });
 }
 
-module.exports.setSearchAction = setSearchAction;
-module.exports.renderHeader = renderHeader;
+module.exports = { setSearchAction, renderHeader };

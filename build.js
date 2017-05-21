@@ -63,14 +63,14 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const xhr = __webpack_require__(4);
+const xhr = __webpack_require__(5);
 
 const apiKey = 'AIzaSyBkPL9Z0loT04dU7mqqtaKbfJW_9ucqgok';
 
@@ -99,9 +99,7 @@ async function downloadMore(pageToken, keyword, maxResults = 15) {
   return addVideoList;
 }
 
-module.exports.search = search;
-module.exports.downloadMore = downloadMore;
-module.exports.videoStatistics = videoStatistics;
+module.exports = { search, downloadMore, videoStatistics };
 
 
 /***/ }),
@@ -109,79 +107,7 @@ module.exports.videoStatistics = videoStatistics;
 /***/ (function(module, exports, __webpack_require__) {
 
 const service = __webpack_require__(0);
-const renderHeader = __webpack_require__(2);
-const renderMain = __webpack_require__(3);
-
-renderHeader.renderHeader();
-
-function makeCustomQuery(query) {
-  service.search(query, 15).then((response) => {
-    renderMain.renderMain(response);
-  }).catch((error) => {
-    console.warn(error);
-  });
-}
-
-renderHeader.setSearchAction(makeCustomQuery);
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-let searchInput;
-let searchButton;
-
-function renderHeader() {
-  const bottomScript = document.body.querySelector('script');
-
-  const header = document.createElement('header');
-  document.body.insertBefore(header, bottomScript);
-
-  const searchContainer = document.createElement('div');
-  searchContainer.className = 'search-container';
-  header.appendChild(searchContainer);
-
-  searchInput = document.createElement('input');
-  searchInput.placeholder = 'search';
-  searchInput.type = 'search';
-  searchInput.className = 'search-input';
-  searchInput.setAttribute('autofocus', 'autofocus');
-  searchContainer.appendChild(searchInput);
-
-  searchButton = document.createElement('button');
-  searchButton.className = 'search-button';
-  searchContainer.appendChild(searchButton);
-
-  const searchIcon = document.createElement('i');
-  searchIcon.className = 'fa fa-search';
-  searchIcon.setAttribute('aria-hidden', 'true');
-  searchButton.appendChild(searchIcon);
-
-  const main = document.createElement('main');
-  document.body.insertBefore(main, bottomScript);
-}
-
-function setSearchAction(searchFunc) {
-  searchInput.addEventListener('keypress', (e) => {
-    if (e.keyCode === 13) {
-      searchFunc(searchInput.value);
-    }
-  });
-  searchButton.addEventListener('click', () => {
-    searchFunc(searchInput.value);
-  });
-}
-
-module.exports.setSearchAction = setSearchAction;
-module.exports.renderHeader = renderHeader;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {const service = __webpack_require__(0);
+const pagination = __webpack_require__(3);
 
 let nextPageToken;
 let itemsNumber = 0;
@@ -266,95 +192,128 @@ function renderMain(resp) {
   main.innerHTML = _.template(tmpl)();
 
   addSection(resp);
+  pagination.pagination(nextPageToken, itemsNumber);
+}
 
-// pagination
-  const sectionWidth = 350;
+module.exports.renderMain = renderMain;
+module.exports.addSection = addSection;
 
-  const mainInner = document.querySelector('.main-inner');
-  const mainInnerWidth = global.getComputedStyle(mainInner).width;
 
-  let columns;
-  switch (mainInnerWidth) {
-    case '1400px': columns = 4;
-      break;
-    case '1030px': columns = 3;
-      break;
-    case '680px': columns = 2;
-      break;
-    default: columns = 1;
-      break;
-  }
 
-  let position = 0;
-  const gallery = document.body.querySelector('.gallery');
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
 
-  let currentPageNumber = 1;
+const service = __webpack_require__(0);
+const renderHeader = __webpack_require__(4);
+const renderMain = __webpack_require__(1);
 
+renderHeader.renderHeader();
+
+function makeCustomQuery(query) {
+  service.search(query, 15).then((response) => {
+    renderMain.renderMain(response);
+  }).catch((error) => {
+    console.warn(error);
+  });
+}
+
+renderHeader.setSearchAction(makeCustomQuery);
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {const service = __webpack_require__(0);
+const renderMain = __webpack_require__(1);
+
+function checkPageItemsNumber(currentPageNumber) {
   const prevOne = document.querySelector('.prev-one');
   const prevTwo = document.querySelector('.prev-two');
   const prevThree = document.querySelector('.prev-three');
 
-  function checkPageItemsNumber() {
-    if (currentPageNumber === 1) {
-      prevOne.style.display = 'none';
-      prevTwo.style.display = 'none';
-      prevThree.style.display = 'none';
-    }
-
-    if (currentPageNumber === 2) {
-      prevOne.style.display = 'inline-block';
-      prevTwo.style.display = 'none';
-      prevThree.style.display = 'none';
-    }
-    if (currentPageNumber === 3) {
-      prevOne.style.display = 'inline-block';
-      prevTwo.style.display = 'inline-block';
-      prevThree.style.display = 'none';
-    }
-
-    if (currentPageNumber >= 4) {
-      prevOne.style.display = 'inline-block';
-      prevTwo.style.display = 'inline-block';
-      prevThree.style.display = 'inline-block';
-    }
+  if (currentPageNumber === 1) {
+    prevOne.style.display = 'none';
+    prevTwo.style.display = 'none';
+    prevThree.style.display = 'none';
   }
-  checkPageItemsNumber();
+
+  if (currentPageNumber === 2) {
+    prevOne.style.display = 'inline-block';
+    prevTwo.style.display = 'none';
+    prevThree.style.display = 'none';
+  }
+  if (currentPageNumber === 3) {
+    prevOne.style.display = 'inline-block';
+    prevTwo.style.display = 'inline-block';
+    prevThree.style.display = 'none';
+  }
+
+  if (currentPageNumber >= 4) {
+    prevOne.style.display = 'inline-block';
+    prevTwo.style.display = 'inline-block';
+    prevThree.style.display = 'inline-block';
+  }
+}
+
+function checkColumnsNumber() {
+  const mainInner = document.querySelector('.main-inner');
+  const mainInnerWidth = global.getComputedStyle(mainInner).width;
+
+  switch (mainInnerWidth) {
+    case '1400px':
+      return 4;
+    case '1030px':
+      return 3;
+    case '680px':
+      return 2;
+    default:
+      return 1;
+  }
+}
+
+function hidePageNumber(e) {
+  const target = e.target;
+  target.style.visibility = 'hidden';
+
+  target.removeEventListener('mouseup', hidePageNumber);
+}
+
+function showPageNumber(e) {
+  const target = e.target;
+
+  if (!target.matches('.tooltip')) {
+    const tooltip = target.querySelector('.tooltip');
+    tooltip.style.visibility = 'visible';
+    target.addEventListener('mouseup', hidePageNumber);
+  }
+}
+
+function pagination(nextPageToken, itemsNumber) {
+  let currentPageNumber = 1;
+  checkPageItemsNumber(currentPageNumber);
+
+  const columns = checkColumnsNumber();
+  const columnWidth = 350;
+
+  let galleryMagrinLeft = 0;
 
   const pageItems = document.querySelectorAll('.page');
+  pageItems.forEach(item => item.addEventListener('mousedown', showPageNumber));
 
   const currTt = document.querySelector('.curr  > .tooltip');
   const nextTt = document.querySelector('.next  > .tooltip');
   const prevOneTt = document.querySelector('.prev-one > .tooltip');
   const prevTwoTt = document.querySelector('.prev-two  > .tooltip');
   const prevThreeTt = document.querySelector('.prev-three  > .tooltip');
-
   currTt.innerHTML = currentPageNumber;
 
-  function hidePageNumber(e) {
-    const target = e.target;
-    target.style.visibility = 'hidden';
-
-    target.removeEventListener('mouseup', hidePageNumber);
-  }
-
-  function showPageNumber(e) {
-    const target = e.target;
-
-    if (target.matches('.tooltip')) {
-      console.log('tooltip');
-      return;
-    }
-
-    const tooltip = target.querySelector('.tooltip');
-    tooltip.style.visibility = 'visible';
-    target.addEventListener('mouseup', hidePageNumber);
-  }
-
-  pageItems.forEach(item => item.addEventListener('mousedown', showPageNumber));
+  const gallery = document.body.querySelector('.gallery');
 
   function pagePrev() {
-    position = Math.min(position + (sectionWidth * columns), 0);
-    gallery.style.marginLeft = `${position}px`;
+    galleryMagrinLeft = Math.min(galleryMagrinLeft + (columnWidth * columns), 0);
+    gallery.style.marginLeft = `${galleryMagrinLeft}px`;
     if (currentPageNumber > 1) {
       currentPageNumber -= 1;
 
@@ -364,7 +323,7 @@ function renderMain(resp) {
       prevTwoTt.innerHTML = currentPageNumber - 2;
       prevThreeTt.innerHTML = currentPageNumber - 3;
 
-      checkPageItemsNumber();
+      checkPageItemsNumber(currentPageNumber);
     }
   }
 
@@ -374,14 +333,14 @@ function renderMain(resp) {
   function pageNext() {
     if ((currentPageNumber + 2) * columns > itemsNumber) {
       service.downloadMore(nextPageToken, query).then((response) => {
-        addSection(response);
+        renderMain.addSection(response);
       }).catch((error) => {
         console.warn(error);
       });
     }
 
-    position -= sectionWidth * columns;
-    gallery.style.marginLeft = `${position}px`;
+    galleryMagrinLeft -= columnWidth * columns;
+    gallery.style.marginLeft = `${galleryMagrinLeft}px`;
 
     currentPageNumber += 1;
 
@@ -391,12 +350,11 @@ function renderMain(resp) {
     prevTwoTt.innerHTML = currentPageNumber - 2;
     prevThreeTt.innerHTML = currentPageNumber - 3;
 
-    checkPageItemsNumber();
+    checkPageItemsNumber(currentPageNumber);
   }
 
   function changePage(e) {
     let coefficient;
-    console.log(e.target);
 
     if (e.target.matches('.next')) {
       coefficient = 1;
@@ -412,14 +370,14 @@ function renderMain(resp) {
 
     if ((currentPageNumber + 2) * columns * coefficient > itemsNumber) {
       service.downloadMore(nextPageToken, query).then((response) => {
-        addSection(response);
+        renderMain.addSection(response);
       }).catch((error) => {
         console.warn(error);
       });
     }
 
-    position -= sectionWidth * columns * coefficient;
-    gallery.style.marginLeft = `${position}px`;
+    galleryMagrinLeft -= columnWidth * columns * coefficient;
+    gallery.style.marginLeft = `${galleryMagrinLeft}px`;
 
     currentPageNumber += (1 * coefficient);
 
@@ -429,11 +387,13 @@ function renderMain(resp) {
     prevTwoTt.innerHTML = currentPageNumber - 2;
     prevThreeTt.innerHTML = currentPageNumber - 3;
 
-    checkPageItemsNumber();
+    checkPageItemsNumber(currentPageNumber);
   }
 
+  pageItems.forEach(item => item.addEventListener('click', changePage));
 
 // pagination with mousemove
+
   let drag = false;
   let currentDrag = 0;
 
@@ -457,18 +417,21 @@ function renderMain(resp) {
     drag = false;
   }
 
-  pageItems.forEach(item => item.addEventListener('click', changePage));
-
+  const mainInner = document.querySelector('.main-inner');
   mainInner.addEventListener('mousedown', mousedown);
   mainInner.addEventListener('mousemove', mousemove);
   mainInner.addEventListener('mouseup', mouseup);
 
+  // swipe
+
   let xDown = null;
   let yDown = null;
+
   function handleTouchStart(e) {
     xDown = e.touches[0].clientX;
     yDown = e.touches[0].clientY;
   }
+
   function handleTouchMove(e) {
     if (!xDown || !yDown) {
       return;
@@ -496,12 +459,63 @@ function renderMain(resp) {
   mainInner.addEventListener('touchmove', handleTouchMove, false);
 }
 
-module.exports.renderMain = renderMain;
+module.exports.pagination = pagination;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+let searchInput;
+let searchButton;
+
+function renderHeader() {
+  const bottomScript = document.body.querySelector('script');
+
+  const header = document.createElement('header');
+  document.body.insertBefore(header, bottomScript);
+
+  const searchContainer = document.createElement('div');
+  searchContainer.className = 'search-container';
+  header.appendChild(searchContainer);
+
+  searchInput = document.createElement('input');
+  searchInput.placeholder = 'search';
+  searchInput.type = 'search';
+  searchInput.className = 'search-input';
+  searchInput.setAttribute('autofocus', 'autofocus');
+  searchContainer.appendChild(searchInput);
+
+  searchButton = document.createElement('button');
+  searchButton.className = 'search-button';
+  searchContainer.appendChild(searchButton);
+
+  const searchIcon = document.createElement('i');
+  searchIcon.className = 'fa fa-search';
+  searchIcon.setAttribute('aria-hidden', 'true');
+  searchButton.appendChild(searchIcon);
+
+  const main = document.createElement('main');
+  document.body.insertBefore(main, bottomScript);
+}
+
+function setSearchAction(searchFunc) {
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.keyCode === 13) {
+      searchFunc(searchInput.value);
+    }
+  });
+  searchButton.addEventListener('click', () => {
+    searchFunc(searchInput.value);
+  });
+}
+
+module.exports = { setSearchAction, renderHeader };
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 function httpGet(url) {
@@ -529,7 +543,7 @@ module.exports.httpGet = httpGet;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 var g;
@@ -556,10 +570,10 @@ module.exports = g;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(1);
+module.exports = __webpack_require__(2);
 
 
 /***/ })
