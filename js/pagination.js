@@ -131,8 +131,8 @@ function pagination(nextPageToken, itemsNumber) {
 
     if (e.target.matches('.next')) {
       coefficient = 1;
-    } else if (e.target.matches('.curr')) {
-      return;
+    } else if (e.target.matches('.tooltip')) {
+      coefficient = 0;
     } else if (e.target.matches('.prev-one')) {
       coefficient = -1;
     } else if (e.target.matches('.prev-two')) {

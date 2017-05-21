@@ -199,7 +199,6 @@ module.exports.renderMain = renderMain;
 module.exports.addSection = addSection;
 
 
-
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -358,8 +357,8 @@ function pagination(nextPageToken, itemsNumber) {
 
     if (e.target.matches('.next')) {
       coefficient = 1;
-    } else if (e.target.matches('.curr')) {
-      return;
+    } else if (e.target.matches('.tooltip')) {
+      coefficient = 0;
     } else if (e.target.matches('.prev-one')) {
       coefficient = -1;
     } else if (e.target.matches('.prev-two')) {
