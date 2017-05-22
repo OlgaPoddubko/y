@@ -9,7 +9,7 @@ body{background:#24304d;}
 main{padding-bottom:70px;}
 .empty-result{text-align:center;font-size:18px;color:#ffffff;}
 .main-inner{max-width:1400px;overflow:hidden;margin:0 auto;}
-.gallery{width:99999px;transition:margin-left 250ms;}
+.gallery{width:999999px;transition:margin-left 250ms;}
 .paging{text-align:center;margin-top:40px;}
 .page{position:relative;display:inline-block;width:25px;height:25px;margin-right:10px;background:#cccccc;border-radius:25px;}
 .page:hover{background:#52e5b1;}
