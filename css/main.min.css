@@ -1,0 +1,48 @@
+*{margin:0;padding:0;font-family:'Myriad Pro','PT Sans', sans-serif;}
+html{height:100%;}
+body{background:#24304d;}
+.search-container{width:40%;margin:40px auto;display:flex;justify-content:space-between;background:#ffffff;border-radius:3px;}
+.search-input{width:100%;border:0;padding-left:10px;border-radius:3px 0 0 3px;}
+.search-button{border:0;background:#ffffff;border-radius:0 3px 3px 0;}
+.fa-search{margin:5px;padding:5px 10px;color:#526db1;}
+.search-button:hover .fa-search{color:#52e5b1;}
+main{padding-bottom:70px;}
+.empty-result{text-align:center;font-size:18px;color:#ffffff;}
+.main-inner{max-width:1400px;overflow:hidden;margin:0 auto;}
+.gallery{width:99999px;transition:margin-left 250ms;}
+.paging{text-align:center;margin-top:40px;}
+.page{position:relative;display:inline-block;width:25px;height:25px;margin-right:10px;background:#cccccc;border-radius:25px;}
+.page:hover{background:#52e5b1;}
+.curr{background:#52e5b1;}
+.tooltip{position:absolute;top:0;left:0;z-index:1;visibility:hidden;width:25px;height:20px;margin-right:10px;padding-top:5px;font-size:14px;color:white;border-radius:25px;background:#52e5b1;cursor:pointer;}
+.curr > .tooltip{visibility:visible;}
+section{display:inline-block;width:330px;height:480px;overflow:hidden;margin-top:15px;margin-right:20px;background:#ffffff;border-radius:5px;}
+.thumbnail{position:relative;}
+.fa-play-circle{display:block;position:absolute;top:24%;left:37%;font-size:100px;color:#ffffff;opacity:0.75;}
+.thumbnail:hover .fa-play-circle{opacity:0.9;}
+.information{padding:20px;font-size:14px;}
+a{text-decoration:none;color:inherit;}
+a:hover{text-decoration:none;color:#52e5b1;}
+a.title{color:#526db1;}
+a.title:hover{text-decoration:none;color:#52e5b1;}
+h2{margin-bottom:10px;font-size:16px;font-weight:normal;}
+ul{list-style-type:none;margin-bottom:10px;border-top:1px solid #24304d;border-bottom:1px solid #24304d;}
+li{margin:7px 10px 7px 0;}
+i{margin-right:9px;}
+/**/@media (max-width:680px){main{padding-bottom:0;}
+    .main-inner{width:330px;}
+    .search-container{width:330px;}
+    .paging{margin-top:5px;}
+    section{margin-top:0;}
+}
+@media (min-width:680px) and (max-width:1030px){main{padding-bottom:0;}
+    .main-inner{width:680px;}
+    .search-container{width:80%;}
+    .paging{margin-top:10px;}
+    section{margin-top:0;}
+}
+@media (min-width:1030px) and (max-width:1400px){main{padding-bottom:0;}
+    .main-inner{width:1030px;}
+    .search-container{width:80%;}
+    .paging{margin-top:20px;}
+}
