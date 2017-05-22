@@ -180,11 +180,8 @@ function renderMain(resp) {
             '</div>' +
             '</div>' +
             '<div class="paging">' +
-            '<span class="page prev-three"><span class="tooltip"></span></span>' +
-            '<span class="page prev-two"><span class="tooltip"></span></span>' +
-            '<span class="page prev-one"><span class="tooltip"></span></span>' +
-            '<span class="page curr"><span class="tooltip"></span></span>' +
-            '<span class="page next"><span class="tooltip"></span></span>' +
+            '<span class="page curr"><span class="tooltip">1</span></span>' +
+            '<span class="page next"><span class="tooltip">2</span></span>' +
             '</div>';
   }
 
@@ -227,35 +224,6 @@ renderHeader.setSearchAction(makeCustomQuery);
 /* WEBPACK VAR INJECTION */(function(global) {const service = __webpack_require__(0);
 const renderMain = __webpack_require__(1);
 
-function checkPageItemsNumber(currentPageNumber) {
-  const prevOne = document.querySelector('.prev-one');
-  const prevTwo = document.querySelector('.prev-two');
-  const prevThree = document.querySelector('.prev-three');
-
-  if (currentPageNumber === 1) {
-    prevOne.style.display = 'none';
-    prevTwo.style.display = 'none';
-    prevThree.style.display = 'none';
-  }
-
-  if (currentPageNumber === 2) {
-    prevOne.style.display = 'inline-block';
-    prevTwo.style.display = 'none';
-    prevThree.style.display = 'none';
-  }
-  if (currentPageNumber === 3) {
-    prevOne.style.display = 'inline-block';
-    prevTwo.style.display = 'inline-block';
-    prevThree.style.display = 'none';
-  }
-
-  if (currentPageNumber >= 4) {
-    prevOne.style.display = 'inline-block';
-    prevTwo.style.display = 'inline-block';
-    prevThree.style.display = 'inline-block';
-  }
-}
-
 function checkColumnsNumber() {
   const mainInner = document.querySelector('.main-inner');
   const mainInnerWidth = global.getComputedStyle(mainInner).width;
@@ -272,132 +240,170 @@ function checkColumnsNumber() {
   }
 }
 
-function hidePageNumber(e) {
-  const target = e.target;
-  target.style.visibility = 'hidden';
-
-  target.removeEventListener('mouseup', hidePageNumber);
-}
-
 function showPageNumber(e) {
   const target = e.target;
 
   if (!target.matches('.tooltip')) {
     const tooltip = target.querySelector('.tooltip');
     tooltip.style.visibility = 'visible';
-    target.addEventListener('mouseup', hidePageNumber);
   }
 }
 
 function pagination(nextPageToken, itemsNumber) {
+  const pageItemsArr = [];
+  document.querySelectorAll('.page').forEach(item => pageItemsArr.push(item));
+  pageItemsArr.forEach(item => item.addEventListener('mousedown', showPageNumber));
+
   let itNum = itemsNumber;
-  let currentPageNumber = 1;
-  checkPageItemsNumber(currentPageNumber);
+  let nextPageNumber = Number(document.querySelector('.next  > .tooltip').innerHTML);
+  let currentPageNumber = Number(document.querySelector('.curr  > .tooltip').innerHTML);
 
   const columns = checkColumnsNumber();
   const columnWidth = 350;
 
   let galleryMagrinLeft = 0;
 
-  const pageItems = document.querySelectorAll('.page');
-  pageItems.forEach(item => item.addEventListener('mousedown', showPageNumber));
-
-  const currTt = document.querySelector('.curr  > .tooltip');
-  const nextTt = document.querySelector('.next  > .tooltip');
-  const prevOneTt = document.querySelector('.prev-one > .tooltip');
-  const prevTwoTt = document.querySelector('.prev-two  > .tooltip');
-  const prevThreeTt = document.querySelector('.prev-three  > .tooltip');
-  currTt.innerHTML = currentPageNumber;
-
   const gallery = document.body.querySelector('.gallery');
 
-  function pagePrev() {
-    galleryMagrinLeft = Math.min(galleryMagrinLeft + (columnWidth * columns), 0);
-    gallery.style.marginLeft = `${galleryMagrinLeft}px`;
-    if (currentPageNumber > 1) {
-      currentPageNumber -= 1;
-
-      currTt.innerHTML = currentPageNumber;
-      nextTt.innerHTML = currentPageNumber + 1;
-      prevOneTt.innerHTML = currentPageNumber - 1;
-      prevTwoTt.innerHTML = currentPageNumber - 2;
-      prevThreeTt.innerHTML = currentPageNumber - 3;
-
-      checkPageItemsNumber(currentPageNumber);
-    }
-  }
 
   const searchInput = document.body.querySelector('.search-input');
   const query = searchInput.value;
 
-  function pageNext() {
-    if ((currentPageNumber + 2) * columns > itNum) {
-
-      service.downloadMore(nextPageToken, query).then((response) => {
-        renderMain.addSection(response);
-        itNum += response.items.length;
-
-      }).catch((error) => {
-        console.warn(error);
-      });
-    }
-
-    galleryMagrinLeft -= columnWidth * columns;
-    gallery.style.marginLeft = `${galleryMagrinLeft}px`;
-
-    currentPageNumber += 1;
-
-    currTt.innerHTML = currentPageNumber;
-    nextTt.innerHTML = currentPageNumber + 1;
-    prevOneTt.innerHTML = currentPageNumber - 1;
-    prevTwoTt.innerHTML = currentPageNumber - 2;
-    prevThreeTt.innerHTML = currentPageNumber - 3;
-
-    checkPageItemsNumber(currentPageNumber);
-  }
-
   function changePage(e) {
-    let coefficient;
-
     if (e.target.matches('.next')) {
-      coefficient = 1;
-    } else if (e.target.matches('.tooltip')) {
-      coefficient = 0;
-    } else if (e.target.matches('.prev-one')) {
-      coefficient = -1;
-    } else if (e.target.matches('.prev-two')) {
-      coefficient = -2;
-    } else if (e.target.matches('.prev-three')) {
-      coefficient = -3;
+      currentPageNumber += 1;
+      const oldCurr = document.querySelector('.curr');
+      oldCurr.classList.remove('curr');
+      oldCurr.classList.add('ord');
+      oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
+
+      const oldNext = document.querySelector('.next');
+      oldNext.classList.remove('next');
+      oldNext.classList.add('curr');
+
+      if ((nextPageNumber + 1) * columns > itNum) {
+        service.downloadMore(nextPageToken, query).then((response) => {
+          renderMain.addSection(response);
+          itNum += response.items.length;
+        }).catch((error) => {
+          console.warn(error);
+        });
+      }
+
+      galleryMagrinLeft -= columnWidth * columns;
+      gallery.style.marginLeft = `${galleryMagrinLeft}px`;
+
+      nextPageNumber += 1;
+
+        // абсолютно ужасный код создания нового span-а
+
+      const paging = document.body.querySelector('.paging');
+      const newPageItem = document.createElement('span');
+      newPageItem.className = 'page next';
+
+      const tmpl = '<span class="tooltip"></span>';
+      newPageItem.innerHTML = _.template(tmpl)();
+      newPageItem.querySelector('.tooltip').innerHTML = nextPageNumber;
+      paging.appendChild(newPageItem);
+      pageItemsArr.push(newPageItem);
+      newPageItem.addEventListener('mousedown', showPageNumber);
+      newPageItem.addEventListener('click', changePage);
+    } else {
+      const newCurrIndex = pageItemsArr.indexOf(e.target);
+      const oldCurrIndex = pageItemsArr.indexOf(document.querySelector('.curr'));
+      const coefficient = newCurrIndex - oldCurrIndex;
+
+      galleryMagrinLeft -= columnWidth * columns * coefficient;
+      gallery.style.marginLeft = `${galleryMagrinLeft}px`;
+
+      currentPageNumber += (1 * coefficient);
+
+      const oldCurr = document.querySelector('.curr');
+      oldCurr.classList.remove('curr');
+      oldCurr.classList.add('ord');
+      oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
+
+      const newCurr = e.target;
+      newCurr.classList.remove('ord');
+      newCurr.classList.add('curr');
+      newCurr.querySelector('.tooltip').style.visibility = 'visible';
     }
-
-    if ((currentPageNumber + 2) * columns * coefficient > itNum) {
-
-      service.downloadMore(nextPageToken, query).then((response) => {
-        renderMain.addSection(response);
-        itNum += response.items.length;
-
-      }).catch((error) => {
-        console.warn(error);
-      });
-    }
-
-    galleryMagrinLeft -= columnWidth * columns * coefficient;
-    gallery.style.marginLeft = `${galleryMagrinLeft}px`;
-
-    currentPageNumber += (1 * coefficient);
-
-    currTt.innerHTML = currentPageNumber;
-    nextTt.innerHTML = currentPageNumber + 1;
-    prevOneTt.innerHTML = currentPageNumber - 1;
-    prevTwoTt.innerHTML = currentPageNumber - 2;
-    prevThreeTt.innerHTML = currentPageNumber - 3;
-
-    checkPageItemsNumber(currentPageNumber);
   }
 
-  pageItems.forEach(item => item.addEventListener('click', changePage));
+  function pagePrev() {
+    galleryMagrinLeft = Math.min(galleryMagrinLeft + (columnWidth * columns), 0);
+    gallery.style.marginLeft = `${galleryMagrinLeft}px`;
 
+    if (currentPageNumber > 1) {
+      const oldCurr = document.querySelector('.curr');
+      oldCurr.classList.remove('curr');
+      oldCurr.classList.add('ord');
+      oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
+
+      const oldCurrIndex = pageItemsArr.indexOf(oldCurr);
+
+      const newCurr = pageItemsArr[oldCurrIndex - 1];
+      newCurr.classList.remove('ord');
+      newCurr.classList.add('curr');
+      newCurr.querySelector('.tooltip').style.visibility = 'visible';
+
+      currentPageNumber -= 1;
+    }
+  }
+
+  function pageNext() {
+    currentPageNumber += 1;
+    const oldCurr = document.querySelector('.curr');
+    oldCurr.classList.remove('curr');
+    oldCurr.classList.add('ord');
+    oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
+
+    const oldCurrIndex = pageItemsArr.indexOf(oldCurr);
+
+    if (oldCurrIndex === pageItemsArr.length - 2) {
+      const oldNext = document.querySelector('.next');
+      oldNext.classList.remove('next');
+      oldNext.classList.add('curr');
+
+      if ((nextPageNumber + 1) * columns > itNum) {
+        service.downloadMore(nextPageToken, query).then((response) => {
+          renderMain.addSection(response);
+          itNum += response.items.length;
+        }).catch((error) => {
+          console.warn(error);
+        });
+      }
+
+      galleryMagrinLeft -= columnWidth * columns;
+      gallery.style.marginLeft = `${galleryMagrinLeft}px`;
+
+      nextPageNumber += 1;
+
+        // абсолютно ужасный код создания нового span-а
+
+      const paging = document.body.querySelector('.paging');
+      const newPageItem = document.createElement('span');
+      newPageItem.className = 'page next';
+
+      const tmpl = '<span class="tooltip"></span>';
+      newPageItem.innerHTML = _.template(tmpl)();
+      newPageItem.querySelector('.tooltip').innerHTML = nextPageNumber;
+      paging.appendChild(newPageItem);
+      pageItemsArr.push(newPageItem);
+      newPageItem.addEventListener('mousedown', showPageNumber);
+      newPageItem.addEventListener('click', changePage);
+    } else {
+      const newCurr = pageItemsArr[oldCurrIndex + 1];
+      newCurr.classList.remove('ord');
+      newCurr.classList.add('curr');
+      newCurr.querySelector('.tooltip').style.visibility = 'visible';
+
+      galleryMagrinLeft -= columnWidth * columns;
+      gallery.style.marginLeft = `${galleryMagrinLeft}px`;
+    }
+  }
+
+  pageItemsArr.forEach(item => item.addEventListener('click', changePage));
 // pagination with mousemove
 
   let drag = false;
@@ -428,7 +434,7 @@ function pagination(nextPageToken, itemsNumber) {
   mainInner.addEventListener('mousemove', mousemove);
   mainInner.addEventListener('mouseup', mouseup);
 
-  // swipe
+    // swipe
 
   let xDown = null;
   let yDown = null;
@@ -466,6 +472,7 @@ function pagination(nextPageToken, itemsNumber) {
 }
 
 module.exports.pagination = pagination;
+
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 

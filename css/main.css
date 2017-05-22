@@ -113,9 +113,13 @@ main {
     visibility: visible;
 }
 
+.next {
+    opacity: 0.5;
+}
+
 section {
     display: inline-block;
-    width: 330px; /* для респонсив переделать */
+    width: 330px;
     height: 480px;
     overflow: hidden;
     margin-top: 15px;

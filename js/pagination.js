@@ -1,6 +1,6 @@
 const service = require('./youtubeService');
 const renderMain = require('./renderMain');
-
+/*
 function checkPageItemsNumber(currentPageNumber) {
   const prevOne = document.querySelector('.prev-one');
   const prevTwo = document.querySelector('.prev-two');
@@ -29,6 +29,15 @@ function checkPageItemsNumber(currentPageNumber) {
     prevThree.style.display = 'inline-block';
   }
 }
+*/
+//let pageItemsArr = [];
+
+let pageItemsArr = [];
+//const pageItems = document.querySelectorAll('.page');
+//pageItems.forEach(item => pageItemsArr.push(item));
+
+document.querySelectorAll('.page').forEach(item => pageItemsArr.push(item));
+console.log(pageItemsArr);
 
 function checkColumnsNumber() {
   const mainInner = document.querySelector('.main-inner');
@@ -63,10 +72,26 @@ function showPageNumber(e) {
   }
 }
 
+function createNewPageItem(e) {
+    e.target.
+
+
+    const paging = document.body.querySelector('.paging');
+    const newPageItem = document.createElement('span');
+    newPageItem.className = 'page next';
+    paging.appendChild(newPageItem);
+
+    let tmpl = '<span class="tooltip"></span>';
+    newPageItem.innerHTML = _.template(tmpl)();
+
+    pageItemsArr.push(newPageItem);
+    console.log(pageItemsArr);
+}
+
 function pagination(nextPageToken, itemsNumber) {
   let itNum = itemsNumber;
-  let currentPageNumber = 1;
-  checkPageItemsNumber(currentPageNumber);
+  //let currentPageNumber = 1;
+  //checkPageItemsNumber(currentPageNumber);
 
   const columns = checkColumnsNumber();
   const columnWidth = 350;
@@ -97,7 +122,7 @@ function pagination(nextPageToken, itemsNumber) {
       prevTwoTt.innerHTML = currentPageNumber - 2;
       prevThreeTt.innerHTML = currentPageNumber - 3;
 
-      checkPageItemsNumber(currentPageNumber);
+      //checkPageItemsNumber(currentPageNumber);
     }
   }
 
@@ -125,7 +150,7 @@ function pagination(nextPageToken, itemsNumber) {
     prevTwoTt.innerHTML = currentPageNumber - 2;
     prevThreeTt.innerHTML = currentPageNumber - 3;
 
-    checkPageItemsNumber(currentPageNumber);
+    //checkPageItemsNumber(currentPageNumber);
   }
 
   function changePage(e) {
@@ -163,7 +188,7 @@ function pagination(nextPageToken, itemsNumber) {
     prevTwoTt.innerHTML = currentPageNumber - 2;
     prevThreeTt.innerHTML = currentPageNumber - 3;
 
-    checkPageItemsNumber(currentPageNumber);
+   // checkPageItemsNumber(currentPageNumber);
   }
 
   pageItems.forEach(item => item.addEventListener('click', changePage));

@@ -1,5 +1,5 @@
 const service = require('./youtubeService');
-const pagination = require('./pagination');
+const pagination = require('./newPagination');
 
 let nextPageToken;
 let itemsNumber = 0;
@@ -72,11 +72,8 @@ function renderMain(resp) {
             '</div>' +
             '</div>' +
             '<div class="paging">' +
-            '<span class="page prev-three"><span class="tooltip"></span></span>' +
-            '<span class="page prev-two"><span class="tooltip"></span></span>' +
-            '<span class="page prev-one"><span class="tooltip"></span></span>' +
-            '<span class="page curr"><span class="tooltip"></span></span>' +
-            '<span class="page next"><span class="tooltip"></span></span>' +
+            '<span class="page curr"><span class="tooltip">1</span></span>' +
+            '<span class="page next"><span class="tooltip">2</span></span>' +
             '</div>';
   }
 
