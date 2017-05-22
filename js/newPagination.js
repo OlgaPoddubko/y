@@ -47,63 +47,74 @@ function pagination(nextPageToken, itemsNumber) {
   const query = searchInput.value;
 
   function changePage(e) {
-    if (e.target.matches('.next')) {
-      currentPageNumber += 1;
-      const oldCurr = document.querySelector('.curr');
-      oldCurr.classList.remove('curr');
-      oldCurr.classList.add('ord');
-      oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
+    console.log(`changePage e.target ${e.target}`);
+    if (!e.target.matches('.tooltip')) {
+      if (e.target.matches('.next')) {
+        const newCurrIndex = pageItemsArr.indexOf(e.target);
+        const oldCurrIndex = pageItemsArr.indexOf(document.querySelector('.curr'));
+        const coefficient = newCurrIndex - oldCurrIndex;
 
-      const oldNext = document.querySelector('.next');
-      oldNext.classList.remove('next');
-      oldNext.classList.add('curr');
+        const oldCurr = document.querySelector('.curr');
+        oldCurr.classList.remove('curr');
+        oldCurr.classList.add('ord');
+        oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
 
-      if ((nextPageNumber + 1) * columns > itNum) {
-        service.downloadMore(nextPageToken, query).then((response) => {
-          renderMain.addSection(response);
-          itNum += response.items.length;
-        }).catch((error) => {
-          console.warn(error);
-        });
+        const newCurr = e.target;
+        newCurr.classList.remove('next');
+        newCurr.classList.add('curr');
+        newCurr.querySelector('.tooltip').style.visibility = 'visible';
+
+        galleryMagrinLeft -= columnWidth * columns * coefficient;
+        gallery.style.marginLeft = `${galleryMagrinLeft}px`;
+
+        currentPageNumber += (1 * coefficient);
+
+        if ((nextPageNumber + 1) * columns > itNum) {
+          service.downloadMore(nextPageToken, query).then((response) => {
+            console.log(`itNum beofre response = ${itNum}`);
+            renderMain.addSection(response);
+            itNum += response.items.length;
+            console.log(`itNum after response = ${itNum}`);
+          }).catch((error) => {
+            console.warn(error);
+          });
+        }
+
+        nextPageNumber += 1;
+
+        // create new span
+
+        const paging = document.body.querySelector('.paging');
+        const newPageItem = document.createElement('span');
+        newPageItem.className = 'page next';
+
+        const tmpl = '<span class="tooltip"></span>';
+        newPageItem.innerHTML = _.template(tmpl)();
+        newPageItem.querySelector('.tooltip').innerHTML = nextPageNumber;
+        paging.appendChild(newPageItem);
+        pageItemsArr.push(newPageItem);
+        newPageItem.addEventListener('mousedown', showPageNumber);
+        newPageItem.addEventListener('click', changePage);
+      } else {
+        const newCurrIndex = pageItemsArr.indexOf(e.target);
+        const oldCurrIndex = pageItemsArr.indexOf(document.querySelector('.curr'));
+        const coefficient = newCurrIndex - oldCurrIndex;
+
+        galleryMagrinLeft -= columnWidth * columns * coefficient;
+        gallery.style.marginLeft = `${galleryMagrinLeft}px`;
+
+        currentPageNumber += (1 * coefficient);
+
+        const oldCurr = document.querySelector('.curr');
+        oldCurr.classList.remove('curr');
+        oldCurr.classList.add('ord');
+        oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
+
+        const newCurr = e.target;
+        newCurr.classList.remove('ord');
+        newCurr.classList.add('curr');
+        newCurr.querySelector('.tooltip').style.visibility = 'visible';
       }
-
-      galleryMagrinLeft -= columnWidth * columns;
-      gallery.style.marginLeft = `${galleryMagrinLeft}px`;
-
-      nextPageNumber += 1;
-
-        // абсолютно ужасный код создания нового span-а
-
-      const paging = document.body.querySelector('.paging');
-      const newPageItem = document.createElement('span');
-      newPageItem.className = 'page next';
-
-      const tmpl = '<span class="tooltip"></span>';
-      newPageItem.innerHTML = _.template(tmpl)();
-      newPageItem.querySelector('.tooltip').innerHTML = nextPageNumber;
-      paging.appendChild(newPageItem);
-      pageItemsArr.push(newPageItem);
-      newPageItem.addEventListener('mousedown', showPageNumber);
-      newPageItem.addEventListener('click', changePage);
-    } else {
-      const newCurrIndex = pageItemsArr.indexOf(e.target);
-      const oldCurrIndex = pageItemsArr.indexOf(document.querySelector('.curr'));
-      const coefficient = newCurrIndex - oldCurrIndex;
-
-      galleryMagrinLeft -= columnWidth * columns * coefficient;
-      gallery.style.marginLeft = `${galleryMagrinLeft}px`;
-
-      currentPageNumber += (1 * coefficient);
-
-      const oldCurr = document.querySelector('.curr');
-      oldCurr.classList.remove('curr');
-      oldCurr.classList.add('ord');
-      oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
-
-      const newCurr = e.target;
-      newCurr.classList.remove('ord');
-      newCurr.classList.add('curr');
-      newCurr.querySelector('.tooltip').style.visibility = 'visible';
     }
   }
 
@@ -113,6 +124,7 @@ function pagination(nextPageToken, itemsNumber) {
 
     if (currentPageNumber > 1) {
       const oldCurr = document.querySelector('.curr');
+      console.log(`pagePrev oldCurr ${oldCurr}`);
       oldCurr.classList.remove('curr');
       oldCurr.classList.add('ord');
       oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
@@ -139,13 +151,16 @@ function pagination(nextPageToken, itemsNumber) {
 
     if (oldCurrIndex === pageItemsArr.length - 2) {
       const oldNext = document.querySelector('.next');
+      console.log(`pageNext oldCurr ${oldCurr}`);
       oldNext.classList.remove('next');
       oldNext.classList.add('curr');
 
       if ((nextPageNumber + 1) * columns > itNum) {
         service.downloadMore(nextPageToken, query).then((response) => {
+          console.log(`itNum before response = ${itNum}`);
           renderMain.addSection(response);
           itNum += response.items.length;
+          console.log(`itNum after response = ${itNum}`);
         }).catch((error) => {
           console.warn(error);
         });
@@ -156,7 +171,7 @@ function pagination(nextPageToken, itemsNumber) {
 
       nextPageNumber += 1;
 
-        // абсолютно ужасный код создания нового span-а
+        // create new span
 
       const paging = document.body.querySelector('.paging');
       const newPageItem = document.createElement('span');
@@ -181,7 +196,8 @@ function pagination(nextPageToken, itemsNumber) {
   }
 
   pageItemsArr.forEach(item => item.addEventListener('click', changePage));
-// pagination with mousemove
+
+  // pagination with mousemove
 
   let drag = false;
   let currentDrag = 0;
@@ -211,7 +227,7 @@ function pagination(nextPageToken, itemsNumber) {
   mainInner.addEventListener('mousemove', mousemove);
   mainInner.addEventListener('mouseup', mouseup);
 
-    // swipe
+  // swipe
 
   let xDown = null;
   let yDown = null;
