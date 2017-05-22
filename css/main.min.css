@@ -16,6 +16,7 @@ main{padding-bottom:70px;}
 .curr{background:#52e5b1;}
 .tooltip{position:absolute;top:0;left:0;z-index:1;visibility:hidden;width:25px;height:20px;margin-right:10px;padding-top:5px;font-size:14px;color:white;border-radius:25px;background:#52e5b1;cursor:pointer;}
 .curr > .tooltip{visibility:visible;}
+.next{opacity:0.5;}
 section{display:inline-block;width:330px;height:480px;overflow:hidden;margin-top:15px;margin-right:20px;background:#ffffff;border-radius:5px;}
 .thumbnail{position:relative;}
 .fa-play-circle{display:block;position:absolute;top:24%;left:37%;font-size:100px;color:#ffffff;opacity:0.75;}

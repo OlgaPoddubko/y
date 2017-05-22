@@ -47,7 +47,6 @@ function pagination(nextPageToken, itemsNumber) {
   const query = searchInput.value;
 
   function changePage(e) {
-    console.log(`changePage e.target ${e.target}`);
     if (!e.target.matches('.tooltip')) {
       if (e.target.matches('.next')) {
         const newCurrIndex = pageItemsArr.indexOf(e.target);
@@ -71,10 +70,8 @@ function pagination(nextPageToken, itemsNumber) {
 
         if ((nextPageNumber + 1) * columns > itNum) {
           service.downloadMore(nextPageToken, query).then((response) => {
-            console.log(`itNum beofre response = ${itNum}`);
             renderMain.addSection(response);
             itNum += response.items.length;
-            console.log(`itNum after response = ${itNum}`);
           }).catch((error) => {
             console.warn(error);
           });
@@ -124,7 +121,6 @@ function pagination(nextPageToken, itemsNumber) {
 
     if (currentPageNumber > 1) {
       const oldCurr = document.querySelector('.curr');
-      console.log(`pagePrev oldCurr ${oldCurr}`);
       oldCurr.classList.remove('curr');
       oldCurr.classList.add('ord');
       oldCurr.querySelector('.tooltip').style.visibility = 'hidden';
@@ -151,16 +147,13 @@ function pagination(nextPageToken, itemsNumber) {
 
     if (oldCurrIndex === pageItemsArr.length - 2) {
       const oldNext = document.querySelector('.next');
-      console.log(`pageNext oldCurr ${oldCurr}`);
       oldNext.classList.remove('next');
       oldNext.classList.add('curr');
 
       if ((nextPageNumber + 1) * columns > itNum) {
         service.downloadMore(nextPageToken, query).then((response) => {
-          console.log(`itNum before response = ${itNum}`);
           renderMain.addSection(response);
           itNum += response.items.length;
-          console.log(`itNum after response = ${itNum}`);
         }).catch((error) => {
           console.warn(error);
         });
@@ -265,4 +258,3 @@ function pagination(nextPageToken, itemsNumber) {
 }
 
 module.exports.pagination = pagination;
-
