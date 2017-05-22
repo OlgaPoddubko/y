@@ -290,6 +290,7 @@ function showPageNumber(e) {
 }
 
 function pagination(nextPageToken, itemsNumber) {
+  let itNum = itemsNumber;
   let currentPageNumber = 1;
   checkPageItemsNumber(currentPageNumber);
 
@@ -330,9 +331,12 @@ function pagination(nextPageToken, itemsNumber) {
   const query = searchInput.value;
 
   function pageNext() {
-    if ((currentPageNumber + 2) * columns > itemsNumber) {
+    if ((currentPageNumber + 2) * columns > itNum) {
+
       service.downloadMore(nextPageToken, query).then((response) => {
         renderMain.addSection(response);
+        itNum += response.items.length;
+
       }).catch((error) => {
         console.warn(error);
       });
@@ -367,9 +371,12 @@ function pagination(nextPageToken, itemsNumber) {
       coefficient = -3;
     }
 
-    if ((currentPageNumber + 2) * columns * coefficient > itemsNumber) {
+    if ((currentPageNumber + 2) * columns * coefficient > itNum) {
+
       service.downloadMore(nextPageToken, query).then((response) => {
         renderMain.addSection(response);
+        itNum += response.items.length;
+
       }).catch((error) => {
         console.warn(error);
       });
