@@ -80,14 +80,12 @@ function pagination(nextPageToken, itemsNumber) {
         nextPageNumber += 1;
 
         // create new span
-
         const paging = document.body.querySelector('.paging');
         const newPageItem = document.createElement('span');
         newPageItem.className = 'page next';
 
-        const tmpl = '<span class="tooltip"></span>';
-        newPageItem.innerHTML = _.template(tmpl)();
-        newPageItem.querySelector('.tooltip').innerHTML = nextPageNumber;
+        const tmpl = '<span class="tooltip"><%=nextPageNumber%></span>';
+        newPageItem.innerHTML = _.template(tmpl)({ nextPageNumber });
         paging.appendChild(newPageItem);
         pageItemsArr.push(newPageItem);
         newPageItem.addEventListener('mousedown', showPageNumber);
@@ -164,15 +162,13 @@ function pagination(nextPageToken, itemsNumber) {
 
       nextPageNumber += 1;
 
-        // create new span
-
+      // create new span
       const paging = document.body.querySelector('.paging');
       const newPageItem = document.createElement('span');
       newPageItem.className = 'page next';
 
-      const tmpl = '<span class="tooltip"></span>';
-      newPageItem.innerHTML = _.template(tmpl)();
-      newPageItem.querySelector('.tooltip').innerHTML = nextPageNumber;
+      const tmpl = '<span class="tooltip"><%=nextPageNumber%></span>';
+      newPageItem.innerHTML = _.template(tmpl)({ nextPageNumber });
       paging.appendChild(newPageItem);
       pageItemsArr.push(newPageItem);
       newPageItem.addEventListener('mousedown', showPageNumber);
